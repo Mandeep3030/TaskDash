@@ -1,0 +1,149 @@
+[{
+  "_id": {
+    "$oid": "69177ef9283c2a4f20347089"
+  },
+  "taskId": "TASK-83457",
+  "name": "Organize Boxes",
+  "description": "Use pallet jack to move pallets to clear room and sort into their respective bins.",
+  "location": "Warehouse 3",
+  "scheduledAt": {
+    "$date": "2025-11-14T14:00:00.000Z"
+  },
+  "status": "pending",
+  "assignedTo": {
+    "$oid": "6917aacfc2a32ef3517e7dc0"
+  },
+  "createdBy": {
+    "$oid": "6917aa90c2a32ef3517e7dbe"
+  },
+  "created": {
+    "$date": "2025-01-14T12:00:00.000Z"
+  },
+  "updated": null
+},
+{
+  "_id": {
+    "$oid": "69177fae283c2a4f2034708f"
+  },
+  "taskId": "TASK-83458",
+  "name": "Unload Truck",
+  "description": "Bring materials off truck and into the loading bay to be processed,",
+  "location": "Warehouse 3",
+  "scheduledAt": {
+    "$date": "2025-11-14T16:00:00.000Z"
+  },
+  "status": "pending",
+  "assignedTo": {
+    "$oid": "6917aacfc2a32ef3517e7dc0"
+  },
+  "createdBy": {
+    "$oid": "6917aa90c2a32ef3517e7dbe"
+  },
+  "created": {
+    "$date": "2025-01-14T12:00:00.000Z"
+  },
+  "updated": null
+},
+{
+  "_id": {
+    "$oid": "69178008283c2a4f20347091"
+  },
+  "taskId": "TASK-83434",
+  "name": "Oversee Warehouse 3",
+  "description": "Create a schedule and assign duties based on the floor manager's requests.",
+  "location": "Warehouse 3",
+  "scheduledAt": {
+    "$date": "2025-11-14T06:00:00.000Z"
+  },
+  "status": "pending",
+  "assignedTo": {
+    "$oid": "6917aa90c2a32ef3517e7dbe"
+  },
+  "createdBy": {
+    "$oid": "6917919fafe03f455106734c"
+  },
+  "created": {
+    "$date": "2025-01-14T05:00:00.000Z"
+  },
+  "updated": null
+},
+{
+  "taskId": "TASK-90001",
+  "name": "Print Brochures",
+  "description": "Run batch A of brochures on Printer 01.",
+  "location": "Printing",
+  "scheduledAt": {"$date": "2025-11-26T08:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90002",
+  "name": "Calibrate Cutter",
+  "description": "Perform routine calibration on Cutter 01.",
+  "location": "Cutting",
+  "scheduledAt": {"$date": "2025-11-26T09:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90003",
+  "name": "Assemble Boxes",
+  "description": "Assemble 100 gift boxes at Assembly Table 01.",
+  "location": "Assembly",
+  "scheduledAt": {"$date": "2025-11-26T10:00:00.000Z"},
+  "status": "in-progress"
+},
+{
+  "taskId": "TASK-90004",
+  "name": "Pack Orders",
+  "description": "Pack online orders batch #42.",
+  "location": "Packing",
+  "scheduledAt": {"$date": "2025-11-26T11:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90005",
+  "name": "Inventory Count",
+  "description": "Perform quick cycle count in Storage Zone 1.",
+  "location": "Storage",
+  "scheduledAt": {"$date": "2025-11-26T12:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90006",
+  "name": "Printer Maintenance",
+  "description": "Clean heads and replace ink on Printer 02.",
+  "location": "Printing",
+  "scheduledAt": {"$date": "2025-11-26T13:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90007",
+  "name": "Unload Supplies",
+  "description": "Unload deliveries and stage materials.",
+  "location": "Loading Bay",
+  "scheduledAt": {"$date": "2025-11-26T14:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90008",
+  "name": "Label Printing",
+  "description": "Print product labels batch B.",
+  "location": "Printing",
+  "scheduledAt": {"$date": "2025-11-26T15:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90009",
+  "name": "Quality Check",
+  "description": "QC for assembled boxes.",
+  "location": "Assembly",
+  "scheduledAt": {"$date": "2025-11-26T16:00:00.000Z"},
+  "status": "pending"
+},
+{
+  "taskId": "TASK-90010",
+  "name": "Shipping Prep",
+  "description": "Prepare shipments and print manifests.",
+  "location": "Packing",
+  "scheduledAt": {"$date": "2025-11-26T17:00:00.000Z"},
+  "status": "pending"
+}]

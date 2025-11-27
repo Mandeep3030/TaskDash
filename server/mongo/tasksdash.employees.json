@@ -1,0 +1,105 @@
+[{
+  "_id": {
+    "$oid": "6917919fafe03f455106734c"
+  },
+  "employeeId": "admin123",
+  "name": "Admin",
+  "email": "admin@company.com",
+  "role": "admin",
+  "hashed_password": "66eaa1d837cd0a40b1c651d8751cc215882cc334",
+  "salt": "1323493298018",
+  "created": {
+    "$date": "2025-11-14T20:31:27.708Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6917aa90c2a32ef3517e7dbe"
+  },
+  "employeeId": "manager461",
+  "name": "Bill Williams",
+  "email": "billw@company.com",
+  "role": "manager",
+  "hashed_password": "bf6564727c6e8d1fe7b7564e93e6141372ce4a10",
+  "salt": "870668083578",
+  "created": {
+    "$date": "2025-11-14T22:17:52.950Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6917aacfc2a32ef3517e7dc0"
+  },
+  "employeeId": "worker23478",
+  "name": "John Doe",
+  "email": "johnd123@company.com",
+  "role": "employee",
+  "hashed_password": "4f262a1c08676f8e33dccdbcad4f5971aeebd402",
+  "salt": "1621610094476",
+  "created": {
+    "$date": "2025-11-14T22:18:55.448Z"
+  },
+  "__v": 0
+},
+{
+  "employeeId": "worker2001",
+  "name": "Jane Smith",
+  "email": "jane.smith@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2002",
+  "name": "Carlos Ruiz",
+  "email": "carlos.ruiz@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2003",
+  "name": "Priya Patel",
+  "email": "priya.patel@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2004",
+  "name": "Alex Johnson",
+  "email": "alex.johnson@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2005",
+  "name": "Mia Chen",
+  "email": "mia.chen@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2006",
+  "name": "Liam O'Connor",
+  "email": "liam.oconnor@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2007",
+  "name": "Fatima Al-Sayed",
+  "email": "fatima.alsayed@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2008",
+  "name": "Noah Williams",
+  "email": "noah.williams@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2009",
+  "name": "Emma Garcia",
+  "email": "emma.garcia@company.com",
+  "role": "employee"
+},
+{
+  "employeeId": "worker2010",
+  "name": "Oliver Smith",
+  "email": "oliver.smith@company.com",
+  "role": "employee"
+}]
