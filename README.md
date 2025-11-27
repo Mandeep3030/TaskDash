@@ -1,4 +1,4 @@
-# Instructions for Professor from Ashley:
+# Instructions for Professor from TEAM SHAGAM:
 
 To ensure you are able to run it, here is some basic usage guidelines.
 
