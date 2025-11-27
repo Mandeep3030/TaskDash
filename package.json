@@ -12,6 +12,9 @@
     "start:server": "npm --prefix server run start",
     "start:client": "npm --prefix client run dev"
   },
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
