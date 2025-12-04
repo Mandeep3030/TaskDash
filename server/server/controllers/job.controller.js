@@ -17,13 +17,10 @@ const create = async (req, res) => {
 }
 
 // LIST
-// Admin/manager sees all, employees see only jobs assigned to them
+// Admin/manager sees all; employees also see all (per new requirement)
 const list = async (req, res) => {
   try {
-    const filter =
-      req.userRole === 'admin' || req.userRole === 'manager'
-        ? {}
-        : { assignedTo: req.auth._id }
+    const filter = {}
 
     const jobs = await Job.find(filter)
       .populate('assignedTo', 'employeeId name email role')

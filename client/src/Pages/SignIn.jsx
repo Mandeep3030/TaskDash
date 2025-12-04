@@ -8,8 +8,6 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -101,14 +99,7 @@ function SignIn() {
           }}
         />
 
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            mt: -0.5,
-          }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <FormControlLabel
             control={
               <Checkbox
@@ -132,46 +123,7 @@ function SignIn() {
           Sign in
         </Button>
 
-        <Divider sx={{ my: 2 }} />
-        <Typography
-          variant="caption"
-          sx={{ color: 'text.secondary', textAlign: 'center' }}
-        >
-          Or continue with
-        </Typography>
-
-        <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="small"
-            startIcon={
-              <img
-                src="https://www.google.com/favicon.ico"
-                alt=""
-                width={16}
-                height={16}
-              />
-            }
-          >
-            Google
-          </Button>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="small"
-            startIcon={
-              <img
-                src="https://developer.apple.com/favicon.ico"
-                alt=""
-                width={16}
-                height={16}
-              />
-            }
-          >
-            Apple
-          </Button>
-        </Box>
+        {/* Social sign-in options removed */}
       </Box>
     </AuthShell>
   );

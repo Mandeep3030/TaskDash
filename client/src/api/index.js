@@ -59,11 +59,11 @@ export async function signIn({ email, password }) {
   return data;
 }
 
-export async function signUp({ name, email, password, employeeId }) {
-  // POST body must match backend model
+export async function signUp({ name, email, password, employeeId, role }) {
+  // POST body must match backend model; include role when provided
   return apiFetch('/auth/signup', {
     method: 'POST',
-    body: { name, email, password, employeeId },
+    body: { name, email, password, employeeId, ...(role ? { role } : {}) },
   });
 }
 
@@ -83,6 +83,10 @@ export async function createJob(job) {
 
 export async function updateJob(id, patch) {
   return apiFetch(`/api/jobs/${id}`, { method: 'PUT', body: patch, auth: true });
+}
+
+export async function deleteJob(id) {
+  return apiFetch(`/api/jobs/${id}`, { method: 'DELETE', auth: true });
 }
 
 // Employees

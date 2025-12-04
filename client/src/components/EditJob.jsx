@@ -1,5 +1,5 @@
-// src/components/AddJob.jsx
-import React, { useMemo, useState, useEffect } from 'react';
+// src/components/EditJob.jsx
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -12,39 +12,43 @@ import Alert from '@mui/material/Alert';
 import { machines, timeSlots } from '../Data/mockdata';
 
 /*
-Reusable AddJob component:
+EditJob component:
 - Props:
   - open: boolean
+  - job: mapped job from Printing (id, jobId, name, description, machineId, status, startSlot, durationSlots, employeeName)
   - onClose: () => void
-  - onSubmit: (payload) => Promise<void> | void
-  - defaultDepartment?: string
-  - defaultMachineId?: string
-  - defaultStartSlot?: number
+  - onSubmit: (id, patch) => Promise<void> | void
+  - onDelete: (id) => Promise<void> | void
 */
 
-function AddJob({ open, onClose, onSubmit, employees = [], defaultMachineId = '', defaultStartSlot = 0 }) {
-  const allMachines = machines;
-
+function EditJob({ open, job, onClose, onSubmit, onDelete }) {
   const [form, setForm] = useState({
     jobId: '',
     name: '',
     description: '',
-    machineId: defaultMachineId || (allMachines[0]?.id || ''),
+    machineId: '',
     assigneeName: '',
     status: 'pending',
-    startSlot: defaultStartSlot,
+    startSlot: 0,
     durationSlots: 1,
   });
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    setForm((f) => ({
-      ...f,
-      machineId: defaultMachineId || allMachines[0]?.id || '',
-      startSlot: defaultStartSlot,
-    }));
-  }, [defaultMachineId, defaultStartSlot, open]);
+    if (open && job) {
+      setForm({
+        jobId: job.jobId || '',
+        name: job.name || '',
+        description: job.description || '',
+        machineId: job.machineId || machines[0]?.id || '',
+        assigneeName: job.employeeName || '',
+        status: job.status || 'pending',
+        startSlot: typeof job.startSlot === 'number' ? job.startSlot : 0,
+        durationSlots: typeof job.durationSlots === 'number' ? job.durationSlots : 1,
+      });
+    }
+  }, [open, job]);
 
   const handleChange = (field) => (e) => {
     setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -66,8 +70,7 @@ function AddJob({ open, onClose, onSubmit, employees = [], defaultMachineId = ''
     setError('');
     setSubmitting(true);
     try {
-      // Payload matches backend Task model fields introduced earlier
-      await onSubmit({
+      const patch = {
         jobId: form.jobId.trim(),
         name: form.name.trim(),
         description: form.description.trim(),
@@ -76,10 +79,11 @@ function AddJob({ open, onClose, onSubmit, employees = [], defaultMachineId = ''
         status: form.status,
         startSlot: Number(form.startSlot),
         durationSlots: Number(form.durationSlots),
-      });
+      };
+      await onSubmit(job.id, patch);
       onClose();
     } catch (e) {
-      setError(e?.message || 'Failed to create job');
+      setError(e?.message || 'Failed to update job');
     } finally {
       setSubmitting(false);
     }
@@ -87,7 +91,7 @@ function AddJob({ open, onClose, onSubmit, employees = [], defaultMachineId = ''
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>New Job</DialogTitle>
+      <DialogTitle>Edit Job</DialogTitle>
       <DialogContent dividers>
         {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
         <Grid container spacing={2}>
@@ -102,7 +106,7 @@ function AddJob({ open, onClose, onSubmit, employees = [], defaultMachineId = ''
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField select label="Machine" value={form.machineId} onChange={handleChange('machineId')} fullWidth>
-              {allMachines.map((m) => (
+              {machines.map((m) => (
                 <MenuItem key={m.id} value={m.id}>{m.name} ({m.id})</MenuItem>
               ))}
             </TextField>
@@ -127,10 +131,13 @@ function AddJob({ open, onClose, onSubmit, employees = [], defaultMachineId = ''
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} disabled={submitting}>Cancel</Button>
-        <Button onClick={handleSubmit} variant="contained" color="secondary" disabled={submitting}>Create Job</Button>
+        {onDelete ? (
+          <Button onClick={() => onDelete(job.id)} color="error" variant="outlined" disabled={submitting}>Delete</Button>
+        ) : null}
+        <Button onClick={handleSubmit} variant="contained" color="secondary" disabled={submitting}>Save Changes</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default AddJob;
+export default EditJob;

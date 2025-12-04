@@ -24,7 +24,7 @@ Props:
 
 const STATUS_OPTIONS = ['pending', 'in-progress', 'completed', 'cancelled'];
 
-function JobCard({ open, job, onClose, onEdit, onUpdateStatus }) {
+function JobCard({ open, job, onClose, onEdit, onUpdateStatus, onDelete }) {
   const [status, setStatus] = useState(job?.status || 'pending');
   const [saving, setSaving] = useState(false);
 
@@ -79,6 +79,9 @@ function JobCard({ open, job, onClose, onEdit, onUpdateStatus }) {
       <DialogActions>
         {onEdit ? (
           <Button onClick={() => onEdit(job)} color="secondary" variant="outlined">Edit</Button>
+        ) : null}
+        {onDelete ? (
+          <Button onClick={() => onDelete(job)} color="error" variant="outlined">Delete</Button>
         ) : null}
         <Button onClick={onClose}>Close</Button>
       </DialogActions>

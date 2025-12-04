@@ -13,12 +13,12 @@ router.use(authCtrl.requireSignin, authCtrl.attachUserRole)
 router
   .route('/')
   .get(jobCtrl.list)
-  .post(authCtrl.hasRole('admin', 'manager'), jobCtrl.create)
+  .post(authCtrl.hasRole('admin'), jobCtrl.create)
 
 // Read / Update / Delete single job
 router
   .route('/:jobId')
   .put(jobCtrl.update) // role checked inside future enhancements
-  .delete(authCtrl.hasRole('admin', 'manager'), jobCtrl.remove)
+  .delete(authCtrl.hasRole('admin'), jobCtrl.remove)
 
 export default router
