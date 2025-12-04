@@ -15,7 +15,8 @@ import MachineSchedule from '../components/MachineSchedule';
 import Header from '../Styles/Header';
 import TabsBar from '../Styles/TabsBar';
 import AddJob from '../components/AddJob.jsx';
-import { getJobs, createJob, updateJob, getEmployees, getToken, getUser, signOut } from '../api/index.js';
+import EditJob from '../components/EditJob.jsx';
+import { getJobs, createJob, updateJob, deleteJob, getEmployees, getToken, getUser, signOut } from '../api/index.js';
 import JobCard from '../components/JobCard.jsx';
 
 function Printing() {
@@ -28,6 +29,8 @@ function Printing() {
   const [jobCardOpen, setJobCardOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [addDefaults, setAddDefaults] = useState({ machineId: '', startSlot: 0 });
+  const [editOpen, setEditOpen] = useState(false);
+  const userRole = (getUser() && getUser().role) || 'user';
 
   // Redirect if not signed in
   useEffect(() => {
@@ -39,8 +42,9 @@ function Printing() {
   // Load tasks from backend
   useEffect(() => {
     async function load() {
+      // Fetch jobs first to ensure visibility even if employees fail
       try {
-        const [jobData, empData] = await Promise.all([getJobs(), getEmployees()]);
+        const jobData = await getJobs();
         const mapped = (jobData || []).map((j) => ({
           id: j._id,
           jobId: j.jobId,
@@ -48,30 +52,32 @@ function Printing() {
           description: j.description,
           department: j.department || 'Printing',
           machineId: j.machineId,
-          employeeName: j.assignedTo?.name || 'Unassigned',
+          employeeName: j.assignedTo?.name || j.assigneeName || 'Unassigned',
           assignedTo: j.assignedTo,
           status: j.status,
           startSlot: typeof j.startSlot === 'number' ? j.startSlot : 0,
           durationSlots: typeof j.durationSlots === 'number' ? j.durationSlots : 1,
         }));
         setJobs(mapped);
+      } catch (err) {
+        console.error('Failed to load jobs', err);
+      }
+
+      // Fetch employees but do not block job visibility if it fails
+      try {
+        const empData = await getEmployees();
         setEmployees(empData || []);
       } catch (err) {
-        console.error('Failed to load tasks', err);
+        console.warn('Failed to load employees (continuing)', err);
       }
     }
     load();
   }, []);
 
-  const departmentMachines = useMemo(
-    () => machines.filter((m) => m.department === selectedDepartment),
-    [selectedDepartment]
-  );
+  const departmentMachines = useMemo(() => machines, []);
 
-  const departmentJobs = useMemo(
-    () => jobs.filter((j) => j.department === selectedDepartment),
-    [jobs, selectedDepartment]
-  );
+  // Show all jobs regardless of department so all users can see existing jobs
+  const departmentJobs = useMemo(() => jobs, [jobs]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 0, bgcolor: 'background.default', overflow: 'hidden' }}>
@@ -93,11 +99,8 @@ function Printing() {
       <TabsBar
         departments={departments}
         selected={selectedDepartment}
-        onSelect={(dept) => {
-          setSelectedDepartment(dept);
-          if (dept === 'Printing') {
-            navigate('/printing');
-          }
+        onSelect={() => {
+          // Departments are now a dummy header; no-op
         }}
       />
       <Box sx={{ flex: 1, display: 'flex', p: 1.5, gap: 1.5, minHeight: 0, overflow: 'hidden' }}>
@@ -118,7 +121,9 @@ function Printing() {
       <Paper elevation={2} sx={{ width: { xs: '100%', md: 350 }, flexShrink: 0, display: 'flex', flexDirection: 'column', p: 1.5, minHeight: 0, overflow: 'hidden' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mb: 1 }}>
           <Typography variant="subtitle1" >Jobs – {selectedDepartment}</Typography>
-          <Button size="small" variant="contained" sx={{ width: '100%', mt: 0.5 }} onClick={() => setAddOpen(true)}>New Job</Button>
+          {userRole === 'admin' && (
+            <Button size="small" variant="contained" sx={{ width: '100%', mt: 0.5 }} onClick={() => setAddOpen(true)}>New Job</Button>
+          )}
           <Typography variant="caption" color="text.secondary">Select a job from the list or directly from the schedule.</Typography>
           
         </Box>
@@ -154,6 +159,7 @@ function Printing() {
             onSelectMachine={setFilterMachineId}
             onJobClick={(job) => { setSelectedJob(job); setJobCardOpen(true); }}
             onEmptyCellClick={(machine, slotIndex) => {
+              if (userRole !== 'admin') return;
               setFilterMachineId(machine.id);
               setAddDefaults({ machineId: machine.id, startSlot: slotIndex });
               setAddOpen(true);
@@ -164,7 +170,7 @@ function Printing() {
 
       {/* Add Job Modal */}
       <AddJob
-        open={addOpen}
+        open={userRole === 'admin' && addOpen}
         onClose={() => setAddOpen(false)}
         defaultDepartment={selectedDepartment}
         defaultMachineId={addDefaults.machineId || filterMachineId || ''}
@@ -180,7 +186,7 @@ function Printing() {
             description: j.description,
             department: j.department || 'Printing',
             machineId: j.machineId,
-            employeeName: j.assignedTo?.name || 'Unassigned',
+            employeeName: j.assignedTo?.name || j.assigneeName || 'Unassigned',
             assignedTo: j.assignedTo,
             status: j.status,
             startSlot: typeof j.startSlot === 'number' ? j.startSlot : 0,
@@ -191,16 +197,15 @@ function Printing() {
       />
 
       {/* Job Card Modal */}
-      <JobCard
+          <JobCard
         open={jobCardOpen}
         job={selectedJob}
         onClose={() => setJobCardOpen(false)}
-        onEdit={(job) => {
-          // In the future, we can open a full edit form
+        onEdit={userRole === 'admin' ? (job) => {
           setJobCardOpen(false);
-          setAddDefaults({ machineId: job.machineId, startSlot: job.startSlot });
-          setAddOpen(true);
-        }}
+          setSelectedJob(job);
+          setEditOpen(true);
+        } : undefined}
         onUpdateStatus={async (job, newStatus) => {
           const backendId = job.id;
           await updateJob(backendId, { status: newStatus });
@@ -212,7 +217,7 @@ function Printing() {
             description: j.description,
             department: j.department || 'Printing',
             machineId: j.machineId,
-            employeeName: j.assignedTo?.name || 'Unassigned',
+            employeeName: j.assignedTo?.name || j.assigneeName || 'Unassigned',
             assignedTo: j.assignedTo,
             status: j.status,
             startSlot: typeof j.startSlot === 'number' ? j.startSlot : 0,
@@ -220,6 +225,70 @@ function Printing() {
           }));
           setJobs(mapped);
         }}
+            onDelete={userRole === 'admin' ? async (job) => {
+              const backendId = job.id;
+              await deleteJob(backendId);
+              setJobCardOpen(false);
+              const jobData = await getJobs();
+              const mapped = (jobData || []).map((j) => ({
+                id: j._id,
+                jobId: j.jobId,
+                name: j.name,
+                description: j.description,
+                department: j.department || 'Printing',
+                machineId: j.machineId,
+                employeeName: j.assignedTo?.name || j.assigneeName || 'Unassigned',
+                assignedTo: j.assignedTo,
+                status: j.status,
+                startSlot: typeof j.startSlot === 'number' ? j.startSlot : 0,
+                durationSlots: typeof j.durationSlots === 'number' ? j.durationSlots : 1,
+              }));
+              setJobs(mapped);
+            } : undefined}
+      />
+
+      {/* Edit Job Modal */}
+      <EditJob
+        open={userRole === 'admin' && editOpen}
+        job={selectedJob}
+        onClose={() => setEditOpen(false)}
+        onSubmit={async (id, patch) => {
+          await updateJob(id, patch);
+          const jobData = await getJobs();
+          const mapped = (jobData || []).map((j) => ({
+            id: j._id,
+            jobId: j.jobId,
+            name: j.name,
+            description: j.description,
+            department: j.department || 'Printing',
+            machineId: j.machineId,
+            employeeName: j.assignedTo?.name || j.assigneeName || 'Unassigned',
+            assignedTo: j.assignedTo,
+            status: j.status,
+            startSlot: typeof j.startSlot === 'number' ? j.startSlot : 0,
+            durationSlots: typeof j.durationSlots === 'number' ? j.durationSlots : 1,
+          }));
+          setJobs(mapped);
+        }}
+        onDelete={userRole === 'admin' ? async (id) => {
+          await deleteJob(id);
+          setEditOpen(false);
+          const jobData = await getJobs();
+          const mapped = (jobData || []).map((j) => ({
+            id: j._id,
+            jobId: j.jobId,
+            name: j.name,
+            description: j.description,
+            department: j.department || 'Printing',
+            machineId: j.machineId,
+            employeeName: j.assignedTo?.name || j.assigneeName || 'Unassigned',
+            assignedTo: j.assignedTo,
+            status: j.status,
+            startSlot: typeof j.startSlot === 'number' ? j.startSlot : 0,
+            durationSlots: typeof j.durationSlots === 'number' ? j.durationSlots : 1,
+          }));
+          setJobs(mapped);
+        } : undefined}
       />
       </Box>
     </Box>

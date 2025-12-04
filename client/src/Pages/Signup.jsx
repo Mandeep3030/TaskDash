@@ -6,10 +6,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -22,12 +24,12 @@ function SignUp() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [agree, setAgree] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  // Display roles map to backend roles
+  const [role, setRole] = useState('employee'); // default to 'user' label
 
   const validate = () => {
     const nextErrors = {};
@@ -41,20 +43,10 @@ function SignUp() {
       nextErrors.email = 'Please enter a valid email';
     }
 
-    if (!employeeId.trim()) {
-      nextErrors.employeeId = 'Employee ID is required';
-    }
-
     if (!password) {
       nextErrors.password = 'Password is required';
     } else if (password.length < 6) {
       nextErrors.password = 'Password must be at least 6 characters';
-    }
-
-    if (!confirmPassword) {
-      nextErrors.confirmPassword = 'Please repeat your password';
-    } else if (confirmPassword !== password) {
-      nextErrors.confirmPassword = 'Passwords do not match';
     }
 
     if (!agree) {
@@ -70,7 +62,7 @@ function SignUp() {
     if (!validate()) return;
     try {
       const name = `${firstName.trim()} ${lastName.trim()}`.trim();
-      await signUp({ name, email: email.trim(), password, employeeId: employeeId.trim() });
+      await signUp({ name, email: email.trim(), password, role });
       // After successful signup, go to sign in
       navigate('/signin');
     } catch (err) {
@@ -86,11 +78,7 @@ function SignUp() {
       toggleActionLabel="Sign in"
       toggleTo="/signin"
     >
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ display: 'grid', gap: 2 }}
-      >
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'grid', gap: 2 }}>
         <Box
           sx={{
             display: 'grid',
@@ -128,15 +116,13 @@ function SignUp() {
           helperText={errors.email}
         />
 
-        <TextField
-          label="Employee ID"
-          placeholder="e.g. emp123"
-          fullWidth
-          value={employeeId}
-          onChange={(e) => setEmployeeId(e.target.value)}
-          error={Boolean(errors.employeeId)}
-          helperText={errors.employeeId}
-        />
+        <FormControl fullWidth>
+          <InputLabel id="role-label">Role</InputLabel>
+          <Select labelId="role-label" id="role-select" value={role} label="Role" onChange={(e) => setRole(e.target.value)}>
+            <MenuItem value={'admin'}>admin</MenuItem>
+            <MenuItem value={'user'}>user</MenuItem>
+          </Select>
+        </FormControl>
 
         <TextField
           type={showPassword ? 'text' : 'password'}
@@ -158,16 +144,6 @@ function SignUp() {
               </InputAdornment>
             ),
           }}
-        />
-
-        <TextField
-          type={showPassword ? 'text' : 'password'}
-          label="Confirm password"
-          fullWidth
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          error={Boolean(errors.confirmPassword)}
-          helperText={errors.confirmPassword}
         />
 
         <FormControlLabel
@@ -196,55 +172,11 @@ function SignUp() {
           </Typography>
         )}
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="secondary"
-          sx={{ py: 1.2, fontWeight: 600, mt: 1 }}
-        >
+        <Button type="submit" variant="contained" color="secondary" sx={{ py: 1.2, fontWeight: 600, mt: 1 }}>
           Create account
         </Button>
 
-        <Divider sx={{ my: 2 }} />
-        <Typography
-          variant="caption"
-          sx={{ color: 'text.secondary', textAlign: 'center' }}
-        >
-          Or continue with
-        </Typography>
-
-        <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="small"
-            startIcon={
-              <img
-                src="https://www.google.com/favicon.ico"
-                alt=""
-                width={16}
-                height={16}
-              />
-            }
-          >
-            Google
-          </Button>
-          <Button
-            fullWidth
-            variant="outlined"
-            size="small"
-            startIcon={
-              <img
-                src="https://developer.apple.com/favicon.ico"
-                alt=""
-                width={16}
-                height={16}
-              />
-            }
-          >
-            Apple
-          </Button>
-        </Box>
+        {/* Social sign-up options removed */}
       </Box>
     </AuthShell>
   );

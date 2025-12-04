@@ -11,7 +11,6 @@ node_modules aren't included like in your MERN skeleton, so ensure you run `npm 
 I have done all of my testing on my Debian machine, so there may be incompatibilities with paths on your local machine.
 
 The `npm run start` command is what is used over the typical `npm run dev`. That run target uses `nodemon` for later use,
-but it's not fully configured as this is a backend prototype not designed for concurrent use with a React frontend yet.
 
 To sign in, the auth endpoints are /auth/signup, /auth/signin, and /auth/signout.
 

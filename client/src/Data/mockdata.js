@@ -17,16 +17,6 @@ export const machines = [
   { id: 'PRN-02', name: 'Printer 02', department: 'Printing' },
   { id: 'PRN-03', name: 'Printer 03', department: 'Printing' },
   { id: 'PRN-04', name: 'Printer 04', department: 'Printing' },
-  { id: 'PRN-05', name: 'Printer 05', department: 'Printing' },
-  { id: 'PRN-06', name: 'Printer 06', department: 'Printing' },
-  { id: 'STO-01', name: 'Storage Zone 1', department: 'Storage' },
-  { id: 'STO-02', name: 'Storage Zone 2', department: 'Storage' },
-  { id: 'CUT-01', name: 'Cutter 01', department: 'Cutting' },
-  { id: 'CUT-02', name: 'Cutter 02', department: 'Cutting' },
-  { id: 'ASM-01', name: 'Assembly Table 01', department: 'Assembly' },
-  { id: 'ASM-02', name: 'Assembly Table 02', department: 'Assembly' },
-  { id: 'PKG-01', name: 'Packing Line 01', department: 'Packing' },
-  { id: 'PKG-02', name: 'Packing Line 02', department: 'Packing' },
 ];
 
 export const jobs = [

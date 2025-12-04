@@ -5,8 +5,7 @@ const EmployeeSchema = new mongoose.Schema({
   employeeId: {
     type: String,
     trim: true,
-    unique: 'Employee ID must be unique',
-    required: 'Employee ID is required'
+    unique: 'Employee ID must be unique'
   },
   name: {
     type: String,
@@ -22,8 +21,8 @@ const EmployeeSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'manager', 'employee'],
-    default: 'employee'
+    enum: ['admin', 'user'],
+    default: 'user'
   },
   location: {
     type: String,

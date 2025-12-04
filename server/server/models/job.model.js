@@ -29,6 +29,11 @@ const JobSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Employee'
   },
+  // Optional free-text assignee when not in employee directory
+  assigneeName: {
+    type: String,
+    trim: true
+  },
   status: {
     type: String,
     enum: ['pending', 'in-progress', 'completed', 'cancelled'],

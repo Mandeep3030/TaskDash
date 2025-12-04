@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { expressjwt } from 'express-jwt'
 import Employee from '../models/employee.model.js'
 import config from '../config/config.js'
+import { getErrorMessage } from './error.controller.js'
 
 // SIGNUP: Create employee and return basic info
 const signup = async (req, res) => {
@@ -12,7 +13,7 @@ const signup = async (req, res) => {
     employee.salt = undefined
     return res.status(201).json(employee)
   } catch (err) {
-    return res.status(400).json({ error: err.message })
+    return res.status(400).json({ error: getErrorMessage(err) })
   }
 }
 
@@ -100,8 +101,7 @@ const hasRole = (...roles) => (req, res, next) => {
 
 // For tasks: allow admin/manager, and assigned employee for READ/UPDATE
 const canAccessTask = (req, res, next) => {
-  const isAdminOrManager =
-    req.userRole === 'admin' || req.userRole === 'manager'
+  const isAdminOrManager = req.userRole === 'admin'
 
   const isAssignee =
     req.task &&
